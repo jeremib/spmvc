@@ -35,6 +35,9 @@ class spmvc {
 		$controller_obj->model =& $this->model;
 		
 		$method_obj->invokeArgs($controller_obj, $parameters);
+		
+		// call the view
+		$this->view->display('app/views/' . $controller . '/' . $action . '.phtml');
 	}
 	
 	private function setEzpdoConfig() {
