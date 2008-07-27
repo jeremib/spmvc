@@ -1,0 +1,10 @@
+#default_dsn = sqlite://campteen.db
+#default_dsn = mysql://ezpdo_ex:pdoiseasy@localhost/ezpdo_ex
+#default_dsn = pgsql://ezpdo_ex:pdoiseasy@localhost/ezpdo_ex
+
+dsn:
+  development: sqlite://spmvc.db
+  production: sqlite://spmvc.db
+
+table:
+  prefix: spmvc_
