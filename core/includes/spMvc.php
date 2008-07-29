@@ -56,16 +56,19 @@ class spmvc {
 		
 		// fetch the view, stick it in the layout
 		// @todo add check for valid view
-		$content_for_layout = $this->view->fetch('app/views/' . $controller . '/' . $action . '.phtml');
+		//die(ROOT . DS . 'app/views/' . $controller . '/' . $action . '.phtml');
+		$this->view->setPath('template', ROOT . DS . 'app' . DS .'views' . DS);
+		$content_for_layout = $this->view->fetch($controller . DS . $action . '.phtml');
 		$this->view->assign('content_for_layout', ( isset($content_for_layout) ? $content_for_layout : '') );
-		$this->view->display('app/views/layouts/default.phtml');
+		$this->view->display('layouts' . DS . 'default.phtml');
 	}
 	
 	private function setEzpdoConfig() {
 		$which_db = $this->config->get('app.database');
 		
 		$ezpdo_config['default_dsn'] = $this->config->get('database.dsn.' . $which_db);
-		$ezpdo_config['source_dirs'] = 'app/models';
+		$ezpdo_config['source_dirs'] = ROOT . DS . 'app' . DS . 'models';
+		$ezpdo_config['compiled_dir'] = $ezpdo_config['source_dirs'] . DS . 'compiled';
 		$ezpdo_config['recursive'] = 'true';
 		$ezpdo_config['compiled_file'] = '.compiled';
 		$ezpdo_config['backup_compiled'] = 'false';

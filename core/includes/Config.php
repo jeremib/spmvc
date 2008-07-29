@@ -36,7 +36,7 @@ class Config {
 	}
 	
 	private function loadConfig() {
-		$yamls = glob("app/config/*.yml");
+		$yamls = glob(ROOT . DS . "app/config/*.yml");
 		foreach($yamls as $file) {
 			list($type) = explode('.', basename($file));
 			
