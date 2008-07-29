@@ -3,6 +3,7 @@
 class Controller {
 	private $view;
 	private $model;
+	public $layout = 'default';
 	
 	public function __construct($model, $view) {
 		$this->view = $view;

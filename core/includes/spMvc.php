@@ -16,7 +16,8 @@ class spmvc {
 	}
 	
 	public function dispatch($route) {
-		list($controller, $action) = explode("/", $route);
+		// surpress any errors/warnings
+		list($controller, $action) = @explode("/", $route);
 		
 		$action = empty($action) ? 'index' : $action;
 		
@@ -36,8 +37,10 @@ class spmvc {
 		
 		$method_obj->invokeArgs($controller_obj, $parameters);
 		
-		// call the view
-		$this->view->display('app/views/' . $controller . '/' . $action . '.phtml');
+		// fetch the view, stick it in the layout
+		$content_for_layout = $this->view->fetch('app/views/' . $controller . '/' . $action . '.phtml');
+		$this->view->assign('content_for_layout', ( isset($content_for_layout) ? $content_for_layout : '') );
+		$this->view->display('app/views/layouts/default.phtml');
 	}
 	
 	private function setEzpdoConfig() {
