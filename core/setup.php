@@ -1,6 +1,4 @@
 <?php
-require 'lib/savant/Savant3.php';
-require 'lib/ezpdo/ezpdo_runtime.php';
 require 'lib/spyc/spyc.php5';
 
 error_reporting (E_ALL);

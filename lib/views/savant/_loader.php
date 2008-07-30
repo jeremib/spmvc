@@ -1,8 +1,8 @@
-<?
+<?php
 /**
  * @author Jeremi Bergman <jeremi@innerserve.com>
  * @package spmvc
- * @subpackage core
+ * @subpackage spmvc.view.savant
  * 
  * @copyright Copyright 2008 Jeremi Bergman Licensed under the Apache License, 
  * Version 2.0 (the "License"); you may not use this file except in compliance with the 
@@ -15,8 +15,10 @@
  * either express or implied. See the License for the specific language governing permissions 
  * and limitations under the License. 
  */
- 
-require 'core/setup.php';
-
-$spmvc = new spMvc();
-$spmvc->dispatch(isset($_GET['route']) ? $_GET['route'] : 'pages/index');
+require "lib/views/savant/Savant3.php";
+class ViewLoader {
+	public function __construct(&$spmvc) {
+		$spmvc->view = new Savant3;
+	}
+}
+?>

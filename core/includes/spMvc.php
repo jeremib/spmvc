@@ -17,19 +17,30 @@
  */
 
 class spmvc {
-	private $view;
-	private $model;
-	private $config;
+	public $view;
+	public $model;
+	public $config;
 	
-	public function __construct($view, $model) {
-		$this->view = $view;
-		$this->model = $model;
-		
+	public function __construct() {	
 		$this->config = new Config;
 		
-		// set ezpdo config
-		$this->setEzpdoConfig();
+		$this->attachView();
+		$this->attachModel();
 
+	}
+	
+	private function attachView() {
+		$v = $this->config->get('app.libs');
+		require_once "lib/views/{$v['view']}/_loader.php";
+
+		$model = new ViewLoader($this);	
+	}
+	
+	private function attachModel() {
+		$v = $this->config->get('app.libs');
+		require_once "lib/models/{$v['model']}/_loader.php";
+
+		$model = new ModelLoader($this);		
 	}
 	
 	public function dispatch($route) {
@@ -61,22 +72,5 @@ class spmvc {
 		$content_for_layout = $this->view->fetch($controller . DS . $action . '.phtml');
 		$this->view->assign('content_for_layout', ( isset($content_for_layout) ? $content_for_layout : '') );
 		$this->view->display('layouts' . DS . 'default.phtml');
-	}
-	
-	private function setEzpdoConfig() {
-		$which_db = $this->config->get('app.database');
-		
-		$ezpdo_config['default_dsn'] = $this->config->get('database.dsn.' . $which_db);
-		$ezpdo_config['source_dirs'] = ROOT . DS . 'app' . DS . 'models';
-		$ezpdo_config['compiled_dir'] = $ezpdo_config['source_dirs'] . DS . 'compiled';
-		$ezpdo_config['recursive'] = 'true';
-		$ezpdo_config['compiled_file'] = '.compiled';
-		$ezpdo_config['backup_compiled'] = 'false';
-		$ezpdo_config['default_oid_column'] = 'id';
-		$ezpdo_config['table_prefix'] = $this->config->get('database.table.prefix');
-		$ezpdo_config['auto_compile'] = 'true';
-		$ezpdo_config['auto_flush'] = 'true';
-		$ezpdo_config['db_lib'] = 'adodb';
-		$this->model->setConfig($ezpdo_config);
 	}
 }

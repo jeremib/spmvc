@@ -1,2 +1,5 @@
 database: development
 debug: true
+libs:
+  view: savant
+  model: ezpdo
