@@ -44,8 +44,11 @@ class spmvc {
 	}
 	
 	public function dispatch($route) {
-		// surpress any errors/warnings
-		list($controller, $action) = @explode("/", $route);
+		if ( count(explode("/", $route)) == 1) {
+			list($controller) = explode("/", $route);
+		} else {
+			list($controller, $action) = explode("/", $route);
+		}
 		
 		$action = empty($action) ? 'index' : $action;
 		
