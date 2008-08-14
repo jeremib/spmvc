@@ -21,26 +21,10 @@ class spmvc {
 	public $model;
 	public $config;
 	
-	public function __construct() {	
-		$this->config = new Config;
-		
-		$this->attachView();
-		$this->attachModel();
-
-	}
-	
-	private function attachView() {
-		$v = $this->config->get('app.libs');
-		require_once "lib/views/{$v['view']}/_loader.php";
-
-		$model = new ViewLoader($this);	
-	}
-	
-	private function attachModel() {
-		$v = $this->config->get('app.libs');
-		require_once "lib/models/{$v['model']}/_loader.php";
-
-		$model = new ModelLoader($this);		
+	public function __construct($model, $view, $config) {
+		$this->model = $model;
+		$this->view = $view;
+		$this->config = $config;
 	}
 	
 	public function dispatch($route) {
@@ -71,7 +55,7 @@ class spmvc {
 		// fetch the view, stick it in the layout
 		// @todo add check for valid view
 		//die(ROOT . DS . 'app/views/' . $controller . '/' . $action . '.phtml');
-		$this->view->setPath('template', ROOT . DS . 'app' . DS .'views' . DS);
+		$this->view->setPath('template', ROOT . DS . APP_DIR . DS . 'app' . DS .'views' . DS);
 		$content_for_layout = $this->view->fetch($controller . DS . $action . '.phtml');
 		$this->view->assign('content_for_layout', ( isset($content_for_layout) ? $content_for_layout : '') );
 		$this->view->display('layouts' . DS . 'default.phtml');

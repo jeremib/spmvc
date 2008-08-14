@@ -1,15 +1,37 @@
 <?php
-require 'lib/spyc/spyc.php5';
-
 error_reporting (E_ALL);
 if (version_compare(phpversion(), '5.0.0', '<') == true) { die ('> PHP 5 Only'); }
 
-// Constants:
-define ('DIRSEP', DIRECTORY_SEPARATOR);
+// defines below borrowed from cakephp
 
-// Get site path
-$site_path = realpath(dirname(__FILE__) . DIRSEP . '..' . DIRSEP) . DIRSEP;
-define ('SITEPATH', $site_path);
+if (!defined('DS')) {
+	define('DS', DIRECTORY_SEPARATOR);
+}
+if (!defined('ROOT')) {
+	define('ROOT', dirname(dirname(dirname(__FILE__))));
+}
+
+if (!defined('APP_DIR')) {
+	define('APP_DIR', basename(dirname(dirname(__FILE__))));
+}
+
+if (!defined('WEBROOT_DIR')) {
+	define('WEBROOT_DIR', basename(dirname(__FILE__)));
+}
+if (!defined('WWW_ROOT')) {
+	define('WWW_ROOT', dirname(__FILE__) . DS);
+}
+
+
+if (function_exists('ini_set') && ini_set('include_path', ROOT . PATH_SEPARATOR . ROOT . DS . APP_DIR . DS . PATH_SEPARATOR . ini_get('include_path'))) {
+	define('APP_PATH', null);
+	define('CORE_PATH', null);
+} else {
+	define('APP_PATH', ROOT . DS . APP_DIR . DS);
+	define('CORE_PATH', ROOT . DS);
+}
+
+require APP_PATH . 'lib/spyc/spyc.php5';
 
 // For loading classes
 function __autoload($class_name) {
@@ -18,7 +40,7 @@ function __autoload($class_name) {
 		$look_in = array('app.controllers', 'app.models', 'app.services', 'app.views', 'core.includes');
 		
 		foreach($look_in as $path) {
-	        $file = SITEPATH . str_replace('.', DIRSEP, $path) . DIRSEP . $filename;
+	        $file = ROOT . DS . APP_DIR . DS . str_replace('.', DS, $path) . DS . $filename;
 			if ( file_exists($file) ) {
 				require $file;
 				return true;

@@ -26,10 +26,10 @@ class ModelLoader {
 		$which_db = $spmvc->config->get('app.database');
 
 		$ezpdo_config['default_dsn'] = $spmvc->config->get('database.dsn.' . $which_db);
-		$ezpdo_config['source_dirs'] = ROOT . DS . 'app' . DS . 'models';
+		$ezpdo_config['source_dirs'] = ROOT . DS . APP_DIR . DS . 'app' . DS . 'models';
 		$ezpdo_config['compiled_dir'] = $ezpdo_config['source_dirs'] . DS . 'compiled';
 		$ezpdo_config['recursive'] = 'true';
-		$ezpdo_config['compiled_fil'] = '.compiled';
+		$ezpdo_config['compiled_file'] = '.compiled';
 		$ezpdo_config['backup_compiled'] = 'false';
 		$ezpdo_config['default_oid_column'] = 'id';
 		$ezpdo_config['table_prefix'] = $spmvc->config->get('database.table.prefix');

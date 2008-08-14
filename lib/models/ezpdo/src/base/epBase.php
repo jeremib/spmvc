@@ -265,6 +265,49 @@ class epBase implements epNameable, epIdentifiable, epValidateable {
         return 'Object (class: '.get_class($this).', name: '.$this->getName().', id: '.$this->getId().')'; 
     }
     
+    /**
+     * Convert object to associative array. Note that we may be
+     * dealing with a cyclic directed graph. So we only expand 
+     * one level down an epObject to avoid loops. 
+     * @param epObject|epArray $x
+     * @param bool $is_prev_ez Is the previous level an EZPDO object?
+     * @return array
+     */
+    public function _o2a($o, $is_prev_ez = false) {
+
+        $array = array();
+        
+        foreach($o as $k => $o_) {
+            
+            // var scalar or null?
+            if (!is_scalar($o_) && !is_null($o_)) {
+                // is the previous level an EZPDO object?
+                if (!$is_prev_ez) {
+                    // if not, expand one level 
+                    $array[$k] = $this->_o2a($o_, $o_ instanceof epObject);
+                } else if ($o_ instanceof epObject) {
+                    // o.w. encode 
+                    $array[$k] = $this->_encodeObject($o_);
+                }
+                continue;
+            }
+            
+            // collect the regular value
+            $array[$k] = $o_;
+        }
+
+        return $array;
+    }
+
+    /**
+     * Encode an epObject
+     * @param epObject $o
+     * @return string
+     */
+    public function _encodeObject(epObject $o) {
+        return $o->epGetClass().':'.$o->epGetObjectId();
+    }
+    
 } // end of class epBase
 
 ?>

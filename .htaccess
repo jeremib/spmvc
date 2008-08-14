@@ -1,11 +1,12 @@
-#RewriteEngine on
-
-#RewriteCond %{REQUEST_FILENAME} !-f
-#RewriteCond %{REQUEST_FILENAME} !-d
-#RewriteRule ^(.*)$ dispatch.php?route=$1 [L,QSA]
-
 <IfModule mod_rewrite.c>
 	RewriteEngine on
+	
+	RewriteCond %{REQUEST_FILENAME} !-f
+	RewriteCond %{REQUEST_FILENAME} !-d
 	RewriteRule    ^$ app/webroot/    [L]
+	
+	RewriteCond %{REQUEST_FILENAME} !-f
+	RewriteCond %{REQUEST_FILENAME} !-d
 	RewriteRule    (.*) app/webroot/$1 [L]
+	
 </IfModule>

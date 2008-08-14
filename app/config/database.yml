@@ -3,8 +3,8 @@
 #default_dsn = pgsql://ezpdo_ex:pdoiseasy@localhost/ezpdo_ex
 
 dsn:
-  development: sqlite://spmvc.db
-  production: sqlite://spmvc.db
+  development: mysql://root@localhost/campteen
+  production: mysql://root@localhost/campteen
 
 table:
   prefix: spmvc_
