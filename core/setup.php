@@ -1,5 +1,5 @@
 <?php
-error_reporting (E_ALL);
+error_reporting (E_ALL ^ E_NOTICE);
 if (version_compare(phpversion(), '5.0.0', '<') == true) { die ('> PHP 5 Only'); }
 
 // defines below borrowed from cakephp
@@ -33,8 +33,10 @@ if (function_exists('ini_set') && ini_set('include_path', ROOT . PATH_SEPARATOR 
 
 require APP_PATH . 'lib/spyc/spyc.php5';
 
+spl_autoload_register('al');
+
 // For loading classes
-function __autoload($class_name) {
+function al($class_name) {
         $filename = $class_name . '.php';
 			
 		$look_in = array('app.controllers', 'app.models', 'app.services', 'app.views', 'core.includes');

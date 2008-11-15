@@ -28,6 +28,13 @@ class spmvc {
 	}
 	
 	public function dispatch($route) {
+		if ( preg_match('/^admin\//', $route) ) {
+			$admin = true;
+			$route = preg_replace('/^admin\//', '', $route); // strip it out
+		} else {
+			$admin = false;
+		}
+
 		if ( count(explode("/", $route)) == 1) {
 			list($controller) = explode("/", $route);
 		} else {
@@ -36,21 +43,34 @@ class spmvc {
 		
 		$action = empty($action) ? 'index' : $action;
 		
+		if ( $admin ) {
+			$action = "admin_{$action}";
+		}
+		
 		$parameters = explode("/", $route);
 		array_shift($parameters); // shift off the controller
 		array_shift($parameters); // shift off the action
 		
+		$this->view->spmvc['controller'] = $controller;
+		$this->view->spmvc['action'] = $action;
+		$this->view->spmvc['parameters'] = $parameters;
+		
 		$class = new ReflectionClass(ucwords($controller) . "Controller");
 
-		$controller_obj = $class->newInstanceArgs(array($this->view, $this->model));
+		$controller_obj = $class->newInstanceArgs(array($this->model, $this->view));
 		$method_obj = $class->getMethod($action);
 		
 		// assign the view engine to our controller
-		$controller_obj->view =& $this->template;
+		$controller_obj->view =& $this->view;
 		// assign the model engine to our controller
 		$controller_obj->model =& $this->model;
 		
 		$method_obj->invokeArgs($controller_obj, $parameters);
+
+		// give the view access to the session
+		$this->view->assign('session', new Session);
+		
+		$controller_obj->preRender();
 		
 		// fetch the view, stick it in the layout
 		// @todo add check for valid view
@@ -58,6 +78,6 @@ class spmvc {
 		$this->view->setPath('template', ROOT . DS . APP_DIR . DS . 'app' . DS .'views' . DS);
 		$content_for_layout = $this->view->fetch($controller . DS . $action . '.phtml');
 		$this->view->assign('content_for_layout', ( isset($content_for_layout) ? $content_for_layout : '') );
-		$this->view->display('layouts' . DS . 'default.phtml');
+		$this->view->display('layouts' . DS . $controller_obj->layout . '.phtml');
 	}
 }

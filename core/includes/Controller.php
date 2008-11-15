@@ -24,9 +24,19 @@ class Controller {
 	public function __construct($model, $view) {
 		$this->view = $view;
 		$this->model = $model;
+		$this->session = new Session;
 	}
 	
 	public function index() {
 
+	}
+	
+	public function preRender() {
+		
+	}
+	
+	public function redirect($to) {
+		header("Location: {$to}");
+		exit;
 	}
 }
